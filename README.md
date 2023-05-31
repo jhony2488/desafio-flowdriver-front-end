@@ -1,5 +1,5 @@
 <h1 align="center" id="">
-   App de tarefas Front End
+   App de estacionamento
 </h1>
 
 
@@ -33,12 +33,13 @@
   Features
 </h2>
 
-- [x] Configurar style guide.
+- [x] Configurado style guide.
 - [x] Adicionado tipagens.
-- [x] Criado listagem de tarefas.
+- [x] Criado listagem dos itens.
 - [x] Fazer integração do CRUD com o back end
 - [x] Criação de pagina de erro 404.
 - [x] Aplicação de documentação de componentes com storybook.
+- [x] Aplicado conteinerização com docker
 
 <h2>Como usar</h2>
 
@@ -52,16 +53,14 @@ Além disto é bom ter um editor para trabalhar com o código como [VSCode](http
 
 ```bash
 # Clone este repositório
-$ git clone <https://github.com/jhony2488/desafio-app-tasks>
+$ git clone <https://github.com/jhony2488/desafio-flowdriver-front-end>
 # Acesse a pasta do projeto no terminal/cmd
-$ cd desafio-app-tasks
-# Acesse a pasta do projeto no terminal/cmd
-$ cd client
+$ cd desafio-flowdriver-front-end
 # Instale as dependências
 $ npm install || yarn install
 ```
 
-<h3 id="rodando-api">🎲 Rodando a aplicação em modo de desenvolvimento</h3>
+<h3 id="rodando-api">🎲 Rodando a aplicação sem docker</h3>
 
 #### Instale o Node.js atravez do link abaixo caso ainda não o tenha instalado
 
@@ -70,6 +69,18 @@ $ npm install || yarn install
 ```bash
 # Execute a aplicação em modo de desenvolvimento
 $ npm run start || yarn start
+# O servidor inciará na porta:3000 - acesse <http://localhost:3000>
+```
+
+<h3 id="rodando-api">🎲 Rodando a aplicação com docker</h3>
+
+#### Instale o Node.js atravez do link abaixo caso ainda não o tenha instalado
+
+- [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
+
+```bash
+# Execute a aplicação em modo de desenvolvimento
+$ docker compose up --build
 # O servidor inciará na porta:3000 - acesse <http://localhost:3000>
 ```
 
