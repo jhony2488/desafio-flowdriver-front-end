@@ -18,7 +18,7 @@ export const getClients = (id?: number): Promise<AxiosResponse> => {
     });
 };
 
-export const setClient = (plate: string,VehicleTypeId: number,LogClients: [],): Promise<AxiosResponse> => {
+export const setClient = (plate: string,VehicleTypeId: number,LogClients: any[],): Promise<AxiosResponse> => {
     return api.post('/clients', {
         headers: {
             Authorization: process.env.REACT_APP_API_KEY,
