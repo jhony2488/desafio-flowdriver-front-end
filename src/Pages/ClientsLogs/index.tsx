@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import { Typography, Container, Modal, Box, Button, Select, MenuItem, Input as InputComponent, InputAdornment } from '@material-ui/core';
 import { TimePicker } from '@mui/lab';
@@ -5,42 +6,46 @@ import { getClients } from '../../services/usersClients';
 import { isIntegerOrFloat } from '../../utils/isIntegirOrFloat';
 import { getLogs, setLog, updateLog, deleteLog } from '../../services/usersLogs';
 import { ContentList } from '../../Components';
+import { PropsClientsLog } from '../../interfaces/clients';
 
 import { useStyles } from './style';
 
 export default function ClientsLogs() {
     const classes = useStyles();
 
-    const [openModal, setOpenModal] = useState<boolean>(false);
-    const [clients, setClients] = useState<[]>([]);
-    const [clientsLogs, setClientsLogs] = useState<[]>([]);
-    const [clientLogs, setLogsClient] = useState<any>({});
-    const [modo, setModo] = useState<string>('create');
-
-    const [userId, setUserId] = useState<number>(0);
-    const [dataLogClient, setDataLogClient] = useState<any>({
+    const clientsMock={
         prohibited: '',
         exit: '',
         price: null,
-        paidOut: null,
+        paidOut: false,
         changeValue: null,
         paidOutPrice: null,
-        priceVehicle: null,
-    });
+        priceVehicle: 0,
+        idUser:0,
+    };
 
-    const handleModal = (item: { plate: string; userId: number; }): void => {
+    const [openModal, setOpenModal] = useState<boolean>(false);
+    const [clients, setClients] = useState<[]>([]);
+    const [clientsLogs, setClientsLogs] = useState<[]>([]);
+    const [clientLogs, setLogsClient] = useState<PropsClientsLog>(clientsMock);
+    const [modo, setModo] = useState<string>('create');
+
+    const [userId, setUserId] = useState<number>(0);
+    const [dataLogClient, setDataLogClient] = useState<PropsClientsLog>(clientsMock);
+
+    const handleModal = (item: PropsClientsLog): void => {
         setOpenModal(!openModal);
         setLogsClient(item);
         setDataLogClient(item);
         setModo('edit');
-        setUserId(item.userId);
+        setUserId(item.userId || 0);
     };
 
     const handleModalSet = (): void => {
         setOpenModal(!openModal);
-        setLogsClient({});
+        setLogsClient(clientsMock);
         setModo('create');
-        setDataLogClient({});
+        setDataLogClient(clientsMock);
     };
     const closeModal = (): void => {
         setOpenModal(!openModal);
@@ -52,29 +57,29 @@ export default function ClientsLogs() {
 
     const handleSet = async () => {
         await setLog(dataLogClient.prohibited,
-            dataLogClient.exit === '' ? null : dataLogClient.exit,
-            dataLogClient.price === '' ? null : dataLogClient.price,
+            dataLogClient.exit|| '',
+            dataLogClient.price  ? null : dataLogClient.price,
             dataLogClient.paidOut,
             dataLogClient.changeValue,
             dataLogClient.paidOutPrice,
             dataLogClient.priceVehicle,
             userId);
-        setDataLogClient({});
+        setDataLogClient(clientsMock);
     };
 
     const handleSubmitEdit = async () => {
         await updateLog(
             dataLogClient.prohibited,
-            dataLogClient.exit === '' ? null : dataLogClient.exit,
-            dataLogClient.price === '' ? null : dataLogClient.price,
+            dataLogClient.exit || '',
+            dataLogClient.price  ? null : dataLogClient.price,
             dataLogClient.paidOut,
             dataLogClient.changeValue,
             dataLogClient.paidOutPrice,
             dataLogClient.priceVehicle,
             userId,
-            clientLogs.id
+            clientLogs.id || 0
         );
-        setLogsClient({});
+        setLogsClient(clientsMock);
     };
 
     useEffect(() => {
@@ -141,23 +146,23 @@ export default function ClientsLogs() {
                             onChange={(event: React.ChangeEvent<{ value: string }>) => dataLogClient.paidOutPrice = isIntegerOrFloat(event.target.value) ? parseFloat(event.target.value) : parseInt(event.target.value)}
                             startAdornment={<InputAdornment position="start">R$</InputAdornment>}
                         />
-                            <label htmlFor="input-title">
+                        <label htmlFor="input-title">
                             Preço que deverá ser pago por hora
                         </label>
-                        {userId > 0 && userId!=null && userId!== undefined && userId?
+                        {userId > 0 && userId != null && userId !== undefined && userId ?
                             <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={dataLogClient.priceVehicle ? 'true' : 'false'}
-                            label="Cliente"
-                            onChange={(event: React.ChangeEvent<{ value: any }>) => dataLogClient.paidOut = event.target.value === 'true' ? true : false}
-                        >
-                             {clients.map((item: { vehicleType: [{value:string}]; plate: string }, index: number) => {
-                                return <MenuItem key={index} value={item.vehicleType[0].value}>{item.plate}</MenuItem>;
-                            })}
-                        </Select> : <></>
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={dataLogClient.priceVehicle ? 'true' : 'false'}
+                                label="Cliente"
+                                onChange={(event: React.ChangeEvent<{ value: any }>) => dataLogClient.paidOut = event.target.value === 'true' ? true : false}
+                            >
+                                {clients.map((item: { vehicleType: [{ value: string }]; plate: string }, index: number) => {
+                                    return <MenuItem key={index} value={item.vehicleType[0].value}>{item.plate}</MenuItem>;
+                                })}
+                            </Select> : <></>
                         }
-                    
+
                         <div className={classes.containerButtons}>
                             <Button variant='contained' color='primary' onClick={() => modo === 'edit' ? handleSubmitEdit() : handleSet()}>
                                 {modo === 'edit' ? 'Editar' : 'Criar'}

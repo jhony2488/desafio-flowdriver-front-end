@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import { Typography, Container, Modal, Box, Button, Select, MenuItem } from '@material-ui/core';
 import { TimePicker } from '@mui/lab';
 import { getClients, deleteClient, updateClient, setClient } from '../../services/usersClients';
 import { getVehicleTypes } from '../../services/vehicleTypes';
 import { ContentList, Input } from '../../Components';
+import { PropsClients,PropsClientsLog} from '../../interfaces/clients';
+import {PropsVehicles } from '../../interfaces/vehicles';
 import { useStyles } from './style';
 
 export default function Clients() {
@@ -11,13 +14,13 @@ export default function Clients() {
 
     const [openModal, setOpenModal] = useState<boolean>(false);
     const [openSetLog, setOpenSetLog] = useState<boolean>(false);
-    const [clients, setClients] = useState<[]>([]);
-    const [vehicles, setVehicles] = useState<[]>([]);
-    const [client, setClientUnique] = useState<any>({});
+    const [clients, setClients] = useState<PropsClients[]>([]);
+    const [vehicles, setVehicles] = useState<PropsVehicles[]>([]);
+    const [client, setClientUnique] = useState<PropsClients>({plate: '',VehicleTypeId:0 });
     const [modo, setModo] = useState<string>('create');
 
     const [vehicleTypeId, setVehicleTypeId] = useState<number>(0);
-    const [LogClients, setLogsClients] = useState<any[]>([]);
+    const [LogClients, setLogsClients] = useState<PropsClientsLog[]>([]);
     const [plate, setPlate] = useState<string>('');
 
     const handleModal = (item: { plate: string; VehicleTypeId: number; }): void => {
@@ -30,7 +33,7 @@ export default function Clients() {
 
     const handleModalSet = (): void => {
         setOpenModal(!openModal);
-        setClientUnique({});
+        setClientUnique({plate: '',VehicleTypeId:0 });
         setModo('create');
         setPlate('');
     };
@@ -82,7 +85,7 @@ export default function Clients() {
                             label="Veiculo"
                             onChange={(event: React.ChangeEvent<{ value: any }>) => setVehicleTypeId(parseInt(event.target.value))}
                         >
-                            {vehicles.map((item: { id: number; name: string }, index) => {
+                            {vehicles.map((item: PropsVehicles, index) => {
                               return  (<MenuItem  key={index}value={item.id}>{item.name}</MenuItem>);
                             })}
                         </Select>
@@ -119,7 +122,7 @@ export default function Clients() {
                                                     paidOut: false,
                                                     changeValue: null,
                                                     paidOutPrice: null,
-                                                    priceVehicle: vehicles.filter((item: { id: number }) => item.id === vehicleTypeId),
+                                                    priceVehicle: vehicles.filter((item: PropsVehicles) => item.id === vehicleTypeId)[0]?.value,
                                                     idUser: null
                                                 }
                                             ]

@@ -44,7 +44,7 @@ export const updateMoney = (id: number | string, value:string,amount:number): Pr
 };
 
 export const updateCoins = ( amountsWithdrawn: PropsCoins[]): Promise<AxiosResponse> => {
-    return api.put(`/notesAndCoins`, {
+    return api.put('/notesAndCoins', {
         headers: {
             Authorization: process.env.REACT_APP_API_KEY,
         },

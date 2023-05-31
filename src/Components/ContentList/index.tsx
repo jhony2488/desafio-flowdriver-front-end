@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import {
     Card,
@@ -7,7 +8,7 @@ import {
     Typography,
 } from '@material-ui/core';
 import { contentStyles } from './style';
-import { Edit, CheckCircle, Close, DeleteOutline } from '@material-ui/icons';
+import { Edit, DeleteOutline } from '@material-ui/icons';
 import { validationKeys, validationValues } from '../../utils/validationsContentList';
 
 
@@ -43,7 +44,7 @@ export default function ContentList({ items, openModalEdit, handleDelete, notFou
 
                                         {validationValues(value)}
                                     </Typography>
-                                )
+                                );
                             })
                         }
                     </CardContent>

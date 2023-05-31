@@ -3,6 +3,7 @@ import { Typography, Container, Modal, Box, Button } from '@material-ui/core';
 import { getCoins, setMoney, updateMoney, deleteMoney } from '../../services/notesAndCoins';
 import { ContentList, Input } from '../../Components';
 import { isIntegerOrFloat } from '../../utils/isIntegirOrFloat';
+import { PropsCoins } from '../../interfaces/coins';
 import { useStyles } from './style';
 
 export default function Money() {
@@ -10,7 +11,7 @@ export default function Money() {
 
     const [openModal, setOpenModal] = useState<boolean>(false);
     const [coins, setCoins] = useState<[]>([]);
-    const [money, setMoneyUnique] = useState<any>({});
+    const [money, setMoneyUnique] = useState<PropsCoins>({ value: '', amount: 0 });
     const [modo, setModo] = useState<string>('create');
 
     const [valueMoney, setValueMoney] = useState<string>('0');
@@ -26,7 +27,7 @@ export default function Money() {
 
     const handleModalSet = (): void => {
         setOpenModal(!openModal);
-        setMoneyUnique({});
+        setMoneyUnique({ value: '', amount: 0 });
         setModo('create');
         setValueMoney('');
         setAmountMoney(0);
@@ -47,7 +48,7 @@ export default function Money() {
 
     const handleSubmitEdit = async (id: number | string, value: string, amount: number) => {
         await updateMoney(id, value, amount);
-        setMoneyUnique({});
+        setMoneyUnique({ value: '', amount: 0 });
     };
 
     useEffect(() => {
@@ -101,7 +102,7 @@ export default function Money() {
                 <Button variant='contained' color='primary' onClick={() => handleModalSet()}>
                     Adicionar Moedas e Cedulas
                 </Button>
-                <ContentList handleDelete={handleDelete} items={coins} openModalEdit={handleModal}  notFound="Nenhuma Moeda e cedula encontrada" />
+                <ContentList handleDelete={handleDelete} items={coins} openModalEdit={handleModal} notFound="Nenhuma Moeda e cedula encontrada" />
             </Container>
         </>
     );

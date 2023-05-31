@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import { Typography, Container, Modal, Box, Button, Select, MenuItem } from '@material-ui/core';
 import { getVehicleTypes, setVehicleType, updateVehicleType, deleteVehicleType } from '../../services/vehicleTypes';
 import { ContentList, Input } from '../../Components';
 import { isIntegerOrFloat } from '../../utils/isIntegirOrFloat';
+import {PropsVehicles } from '../../interfaces/vehicles';
 import { useStyles } from './style';
 
 export default function Vehicles() {
@@ -10,7 +12,7 @@ export default function Vehicles() {
 
     const [openModal, setOpenModal] = useState<boolean>(false);
     const [vehicles, setVehicles] = useState<[]>([]);
-    const [vehicle, setVehicleUnique] = useState<any>({});
+    const [vehicle, setVehicleUnique] = useState<PropsVehicles >({ id:0, name: '', value: 0});
     const [modo, setModo] = useState<string>('create');
 
     const [valueVehicle, setValueVehicle] = useState<string>('0');
@@ -26,7 +28,7 @@ export default function Vehicles() {
 
     const handleModalSet = (): void => {
         setOpenModal(!openModal);
-        setVehicleUnique({});
+        setVehicleUnique({name: '', value: 0});
         setModo('create');
         setNameVehicle('');
         setValueVehicle('');
@@ -46,7 +48,7 @@ export default function Vehicles() {
 
     const handleSubmitEdit = async (id: number | string, name: string, value: number) => {
         await updateVehicleType(id, name, value);
-        setVehicleUnique({});
+        setVehicleUnique({name: '', value: 0});
     };
 
     useEffect(() => {
@@ -75,7 +77,7 @@ export default function Vehicles() {
                             onChange={(event: React.ChangeEvent<{ value: any }>) => setNameVehicle(event.target.value)}
                         >
                             {vehicles.map((item: { id: number; name: string }, index) => {
-                                <MenuItem value={item.name}>{item.name}</MenuItem>
+                                return(<MenuItem key={index} value={item.name}>{item.name}</MenuItem>);
                             })}
                         </Select>
 
@@ -86,7 +88,7 @@ export default function Vehicles() {
 
 
                         <div className={classes.containerButtons}>
-                            <Button variant='contained' color='primary' onClick={() => modo === 'edit' ? handleSubmitEdit(vehicle?.id, nameVehicle, isIntegerOrFloat(valueVehicle) ? parseFloat(valueVehicle) : parseInt(valueVehicle),) : handleSet()}>
+                            <Button variant='contained' color='primary' onClick={() => modo === 'edit' ? handleSubmitEdit(vehicle?.id || '', nameVehicle, isIntegerOrFloat(valueVehicle) ? parseFloat(valueVehicle) : parseInt(valueVehicle),) : handleSet()}>
                                 {modo === 'edit' ? 'Editar' : 'Criar'}
                             </Button>
                             <Button variant='contained' color='inherit' onClick={() => closeModal()}>
