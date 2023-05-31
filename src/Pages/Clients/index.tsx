@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Container, Modal, Box, Button, Select, MenuItem } from '@material-ui/core';
-import { TimePicker } from '@mui/x-date-pickers-pro/TimePicker';
+import { TimePicker } from '@mui/lab';
 import { getClients, deleteClient, updateClient, setClient } from '../../services/usersClients';
 import { getVehicleTypes } from '../../services/vehicleTypes';
-import { ContentList, Input } from '../../Components'
+import { ContentList, Input } from '../../Components';
 import { useStyles } from './style';
 
 export default function Clients() {
@@ -25,7 +25,7 @@ export default function Clients() {
         setClientUnique(item);
         setModo('edit');
         setPlate(item.plate);
-        setVehicleTypeId(item.VehicleTypeId)
+        setVehicleTypeId(item.VehicleTypeId);
     };
 
     const handleModalSet = (): void => {
@@ -83,7 +83,7 @@ export default function Clients() {
                             onChange={(event: React.ChangeEvent<{ value: any }>) => setVehicleTypeId(parseInt(event.target.value))}
                         >
                             {vehicles.map((item: { id: number; name: string }, index) => {
-                                <MenuItem value={item.id}>{item.name}</MenuItem>
+                              return  (<MenuItem  key={index}value={item.id}>{item.name}</MenuItem>);
                             })}
                         </Select>
 
